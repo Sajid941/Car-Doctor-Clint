@@ -30,7 +30,7 @@ const NavBar = () => {
                     {navLink}
                 </ul>
             </div>
-            <div className="navbar-end">
+            <div className="navbar-end ">
                 <a className="btn btn-outline border-primary-color text-primary-color">Appointment</a>
             </div>
         </div>
