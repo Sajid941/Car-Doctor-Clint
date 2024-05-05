@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import loginSVG from "../../assets/login.svg"
+import useAuth from './../../hooks/useAuth';
 const Register = () => {
+    const {createUser}=useAuth()
+
     const handleRegister = e => {
         e.preventDefault()
         const form = e.target;
@@ -8,6 +11,14 @@ const Register = () => {
         const email = form.email.value
         const password = form.password.value
         console.log(name,email, password)
+        createUser(email,password)
+        .then(result =>{
+            console.log(result.user)
+        })
+        .catch(error =>{
+            console.error(error);
+        })
+
     }
     return (
         <div className="hero ">
