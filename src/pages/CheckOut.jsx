@@ -22,9 +22,9 @@ const CheckOut = () => {
             img:service.img,
             title:service.title
         }
-        console.log(order);
+        // console.log(order);
 
-        fetch("http://localhost:3000/booking",{
+        fetch("https://car-doctor-server-lyart-nine.vercel.app/booking",{
             method:"POST",
             headers:{
                 "content-type": "application/json"

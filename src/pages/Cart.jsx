@@ -1,24 +1,30 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Cart = () => {
     const { user } = useAuth()
     const [services, setServices] = useState([])
-    const url = `http://localhost:3000/booking?email=${user.email}`
+    const axiosSecure = useAxiosSecure()
+    const url = `/booking?email=${user.email}`
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setServices(data))
-    }, [url])
+        // fetch(url,{credentials:'include'})
+        //     .then(res => res.json())
+        //     .then(data => setServices(data))
+        axiosSecure.get(url)
+        .then(res =>{
+            setServices(res.data)
+        })
+    }, [url,axiosSecure])
 
     const handleDelete = id => {
-        fetch(`http://localhost:3000/booking/${id}`, {
-            method: "DELETE"
+        fetch(`https://car-doctor-server-lyart-nine.vercel.app/booking/${id}`, {
+            method: "DELETE",
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 if (data.deletedCount > 0) {
                     const remaining = services.filter(service => service._id !== id)
                     setServices(remaining)
@@ -26,7 +32,7 @@ const Cart = () => {
             })
     }
     const handleConform = id => {
-        fetch(`http://localhost:3000/booking/${id}`, {
+        fetch(`https://car-doctor-server-lyart-nine.vercel.app/booking/${id}`, {
             method: "PATCH",
             headers:{
                 'content-type':'application/json'
@@ -35,7 +41,7 @@ const Cart = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 if (data.modifiedCount > 0) {
                     const remaining = services.filter(service => service._id !== id)
                     const updated = services.find(service => service._id === id)
@@ -61,7 +67,7 @@ const Cart = () => {
                 <tbody>
                     {/* row 1 */}
                     {
-                        services.map(service =>
+                        services?.map(service =>
                             <tr key={service._id}>
                                 <th>
                                     <button onClick={() => handleDelete(service._id)} className="btn btn-circle">

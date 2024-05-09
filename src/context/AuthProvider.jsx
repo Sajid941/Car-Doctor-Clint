@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import app from './../services/firebase.config';
+import axios from 'axios';
 
 export const AuthContext = createContext(null)
 const AuthProvider = ({ children }) => {
@@ -27,12 +28,24 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setLoading(false)
-            console.log(currentUser)
             setUser(currentUser)
+            setLoading(false)
+            const loggedUser = { email: currentUser?.email }
+            if (currentUser) {
+                axios.post('https://car-doctor-server-lyart-nine.vercel.app/jwt', loggedUser, { withCredentials: true })
+                    .then(res => {
+                        console.log(res.data);
+                    })
+            }
+            axios.post('https://car-doctor-server-lyart-nine.vercel.app/logout', loggedUser, { withCredentials: true })
+                .then(res => {
+                    console.log(res.data);
+                })
+
+            // console.log(currentUser)
         })
         return () => unsubscribe()
-    }, [auth])
+    })
     const authInfo = {
         user,
         loading,

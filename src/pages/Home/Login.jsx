@@ -1,23 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginSVG from "../../assets/login.svg"
 import useAuth from "../../hooks/useAuth";
 const Login = () => {
-    const {logIn} = useAuth()
-    const handleLogin = e =>{
+    const { logIn } = useAuth()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const handleLogin = e => {
         e.preventDefault()
         const form = e.target;
-        const email = form.email.value 
-        const password = form.password.value 
-        console.log(email,password)
-        logIn(email,password)
-        .then(result => {
-            console.log(result.user);
-            alert("login successfully")
-        })
-        .catch(error =>{
-            console.log(error);
-            alert(error.message)
-        })
+        const email = form.email.value
+        const password = form.password.value
+        // console.log(email, password)
+        logIn(email, password)
+            .then(result => {
+                const loggedInUser = (result.user);
+                console.log(loggedInUser);
+                alert("login successfully")
+                navigate(location?.state ? location.state : '/')
+
+            })
+            .catch(error => {
+                console.log(error);
+                alert(error.message)
+            })
     }
     return (
         <div className="hero ">

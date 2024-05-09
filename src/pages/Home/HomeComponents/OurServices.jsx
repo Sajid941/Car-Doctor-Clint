@@ -1,14 +1,11 @@
-import axios from "axios";
-import { useState } from "react";
+
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import useServices from "../../../hooks/useServices";
 
 const OurServices = () => {
-    const [services, setServices] = useState([])
-    axios('http://localhost:3000/services')
-        .then(data => {
-            setServices(data.data)
-        })
+    const services = useServices()
+
     return (
         <div>
             <div className="text-center mt-10 md:px-48 lg:px-72">
@@ -19,7 +16,7 @@ const OurServices = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 lg:px-20">
                 {
                     services.map(service =>
-                        <div key={service._id} className="bg-base-100 w-80  border p-5 rounded-md ">
+                        <div key={service._id} className="bg-base-100   border p-5 rounded-md ">
                             <figure><img className="rounded-lg h-48 w-full object-cover" src={service.img} alt="Image" /></figure>
                             <div className="">
                                 <h2 className="text-2xl font-bold my-4">{service.title}</h2>
